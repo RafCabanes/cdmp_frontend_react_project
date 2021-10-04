@@ -1,11 +1,13 @@
-// import "./styles.css";
+import "./App.css";
 import { useState, useEffect } from "react";
 import React from "react";
 
 export default function App() {
   const[ duck, setDuck ] = useState("default duck");
   const[ card, setCard ] = useState("no card chosen");
-  const[ cardName, setCardName] = useState("defaultcard")
+  const[ cardName, setCardName ] = useState("defaultcard");
+  // array
+  const[ cardsReceived, setCardsReceived ] = useState([]);
   
   const [isLoading, setIsLoading] = useState(false);
   
@@ -55,6 +57,7 @@ export default function App() {
   
   const getCard = async () => {
     setIsLoading(true);
+    setCardsReceived([]);
     console.log("searching for "+ cardName);
     // const url = "https://api.magicthegathering.io/v1/cards?supertypes=legendary&types=creature&colors=black,white&pageSize=2";
     const url = makeUrl(cardName);
@@ -68,14 +71,25 @@ export default function App() {
           // console.log(response);
           const cardResponse = await response.json();
           // foreach cardItem in cardResponse.cards array
-          for(var cardItem in cardResponse.cards) {
-            console.log("index: " + cardItem);
-            console.log(cardResponse.cards[cardItem]);
-          }
+          // for(var cardItem in cardResponse.cards) {
+          //   console.log("index: " + cardItem);
+          //   console.log(cardResponse.cards[cardItem]);
+          // }
+          
+          
+          setCardsReceived(cardResponse.cards);
+          console.log(cardsReceived);
+          // listCards(cardsReceived);
+          
+          // for(var cardItem in cardsReceived){
+          //   console.log("index: " + cardItem);
+          //   const card = JSON.parse(cardItem);
+          //   console.log(card);
+          // }
+          
           
           // name of first card result
           // console.log(cardResponse.cards[0].name);
-          
         }
         
         )
@@ -85,12 +99,32 @@ export default function App() {
     setIsLoading(false);
   }
   
+  // const listCardsReceived = cardsReceived.map((card) => 
+  //   <li>{card.imageUrl}</li>  
+  // );
+ 
+  // const displayCards = () => {
+  //   const tempArray = []
+  //   for(var card in cardsReceived){
+  //     if(card.imageUrl){
+  //       tempArray.push(card);
+  //       console.log(card);
+  //     }
+  //   }
+  //   const listCardsReceived = tempArray.map((card) =>
+  //     <li>{card.imageUrl}</li>
+  //   );
+  //   return(
+  //     <ul>{listCardsReceived}</ul>
+  //   )
+  // }
+  
   // useEffect exactly once
   useEffect(() => {
     // getData();
     getCard();
   }, []);
-
+  
   return (
     <div className="App">
       {isLoading && <h1>currently fetching response</h1>}
