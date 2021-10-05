@@ -1,7 +1,40 @@
+body {
+  color: white;
+  background-color: black;
+  background-image: url("meme.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
 .App {
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.cardDisplayBox {
+  text-align: left;
+  /*background-color: MidnightBlue*/
+  /*display: flex;*/
+  /*flex-direction: row;*/
+}
+
+.cardImageBox {
+  align-items: center;
+  justify-content: center;
+}
+
+.appSearchDescription {
+  text-align: left;
+  color: black;
+  margin: auto;
+  min-width: 400px;
+  max-width: 600px;
+  background-color: white;
+  /*background: black;*/
+  /*border: 3px solid black;*/
+  /*color: white;*/
 }
