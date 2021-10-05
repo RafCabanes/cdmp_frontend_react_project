@@ -1,22 +1,25 @@
+// Api documentation can be found in  https://docs.magicthegathering.io/
 import "./App.css";
 import { useState, useEffect } from "react";
 import React from "react";
 
 export default function App() {
   // const[ duck, setDuck ] = useState("default duck");
-  const[ card, setCard ] = useState("no card chosen");
-  const[ cardName, setCardName ] = useState("defaultcard");
   
-  const[ displayCardName, setDisplayCardName ] = useState("displayCardName");
+  // cardName used for search
+  const[ cardName, setCardName ] = useState("defaultcard");
+  // display variables used for display
+  const[ displayCardName, setDisplayCardName ] = useState("");
   const[ displayCardType, setDisplayCardType] = useState("displayCardType");
   const[ displayCardArtist, setDisplayCardArtist] = useState("displayCardArtist");
   const[ displayCardSetName, setDisplayCardSetName] = useState("displayCardSetName");
   const[ displayCardRarity, setDisplayCardRarity] = useState("displayCardRarity");
   const[ displayCardImageUrl, setDisplayCardImageUrl] = useState("");
+  const[isLoading, setIsLoading] = useState(false);
+  
   // const cardsReceived = []
   // const artistArray =["testitem", "seconditem", "thriditem", "fourthitem"]
   // const artistArray =[]
-  const [isLoading, setIsLoading] = useState(false);
   
   // const emptyCardsReceivedArray = () => {
   //   // cardsReceived = [];
@@ -29,7 +32,7 @@ export default function App() {
     const baseUrl = "https://api.magicthegathering.io/v1/cards?";
     const cardUrlName = "name=" + cardName;
     // const cardUrlPageSize = "&pageSize=" + pageSize;
-    const workingUrl = baseUrl + cardUrlName;
+    const workingUrl = (baseUrl + cardUrlName).toString();
     return workingUrl;
   };  
   
@@ -113,12 +116,12 @@ export default function App() {
           // saveCardArtistArray(cardsReceived);
         }
         
-        )
+        );
     } catch(e) {
-      console.log(e.message)
+      console.log(e.message);
     }
     setIsLoading(false);
-  }
+  };
   
   const checkCardValuesConsole = () => {
     console.log(displayCardName);
@@ -196,34 +199,47 @@ export default function App() {
   // };
   
   const CardInfoBox = () => {
+    if(displayCardName==="" || !displayCardName) return (<p></p>);
     return(
-      <div>
-        <h1> Card Info</h1>
+      <div className="cardDisplayBox">
+        <h2>Found card: {displayCardName}</h2>
           {<ul>
-            <li>Card Name: {displayCardName}</li>
             <li>Card Type: {displayCardType}</li>
             <li>Card Artist: {displayCardArtist}</li>
             <li>Card Set: {displayCardSetName}</li>
-            <li>Card Rarity {displayCardRarity}</li>
+            <li>Card Rarity: {displayCardRarity}</li>
           </ul>}
       </div>
-      )
+      );
     // return null;
   };
   
-  const CardImageBox = () => {
-    if(displayCardImageUrl==="" || !displayCardImageUrl) return(<h3>no image available</h3>);
+  const AppDescriptionBox = () => {
     return(
-      <div>
+      <div className="appSearchDescription">
+        <h3 >This is simple app to search for information on cards 
+        from the popular trading card game Magic The Gathering. 
+        To get started, please type a card name in the searchbox and 
+        click the button (eg. Sigarda, Host of Herons, Plains, skyknight legionnaire ...)</h3>
+        <p> for more info in the api used, please see: https://docs.magicthegathering.io/ </p>
+      </div>
+    );
+  };
+  
+  const CardImageBox = () => {
+    // if(displayCardImageUrl==="" || !displayCardImageUrl) return(<h3>no image available</h3>);
+    if(!displayCardImageUrl) return(<h3></h3>);
+    if(displayCardImageUrl==="") return(<h3>no image available</h3>);
+    return(
+      <div className="cardImageBox">
         <img
           src={displayCardImageUrl}
-          // alt="new"
         />
       </div>
-    )
-  }
+    );
+  };
   
-  // useEffect exactly once
+  // useEffect to run exactly once
   useEffect(() => {
     getCard();
   }, []);
@@ -240,11 +256,11 @@ export default function App() {
         />
         <button onClick={getCard}>Search Card</button>
       </div>
-      
-      <div className="cardDisplayBox">
+      <div>
         <CardInfoBox />
         <CardImageBox />
       </div>
+      <AppDescriptionBox />
     </div>
   );
 }
