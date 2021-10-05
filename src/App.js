@@ -6,17 +6,27 @@ export default function App() {
   const[ duck, setDuck ] = useState("default duck");
   const[ card, setCard ] = useState("no card chosen");
   const[ cardName, setCardName ] = useState("defaultcard");
-  // const[ cardsReceived, setCardsReceived ] = useState([]);
   const cardsReceived = []
   const artistArray =["testitem", "seconditem", "thriditem", "fourthitem"]
   // const artistArray =[]
+  // const[arrayUpdated, setArrayUpdated]  = useState(false);
   
   const [isLoading, setIsLoading] = useState(false);
+  
+  // const arrayWasUpdated = () => {
+  //   // function to change state of this
+  //   if(arrayUpdated){
+  //     setArrayUpdated(false)
+  //   } else {
+  //     setArrayUpdated(true)
+  //   }
+  // }
   
   const emptyCardsReceivedArray = () => {
     // cardsReceived = [];
     // empty cardsReceived array by setting length to 0
     cardsReceived.length = 0;
+    artistArray.length =0;
   };
   
   const makeUrl = (props) => {
@@ -119,6 +129,7 @@ export default function App() {
     for(var cardNumber in cardsReceived) {
       console.log(cardsReceived[cardNumber].name)
       console.log(cardsReceived[cardNumber].type)
+      console.log(cardsReceived[cardNumber].artist)
       console.log(cardsReceived[cardNumber].setName)
       console.log(cardsReceived[cardNumber].rarity)
       console.log(cardsReceived[cardNumber].imageUrl)
@@ -142,29 +153,31 @@ export default function App() {
   //   }
   // }
   
-  const DisplayArtistArray = () => {
-    return(
+  function ListItem(props) {
+    return <li>{props.value}</li>;
+  }
+  
+  const DisplayArtistArray = (props) => {
+    const artistArray = props.artistArray;
+    if(isLoading) {
+      return <h1> Loading </h1>;
+    }
+    return (
       <ul>
-        {artistArray.map((artist) => (
-        <li>{artist}</li>
-        ))}
+        {artistArray.map((artist) =>
+          <ListItem key={artist.toString()}
+                    value={artist} />
+        )}
       </ul>
     );
+    // return(
+    //   <ul>
+    //     {artistArray.map((artist) => (
+    //     <li>{artist}</li>
+    //     ))}
+    //   </ul>
+    // );
   };
-  
-  // const DisplayArtistsArray = () => {
-  //   const tempArray = [];
-  //   for(var artist in artistArray){
-  //     tempArray.push(artistArray[artist]);
-  //   }
-  //   return(
-  //     <ul>
-  //       {tempArray.map((artist) => (
-  //       <li>{artist}</li>
-  //       ))}
-  //     </ul>
-  //   );
-  // };
   
   // const displayCards = () => {
   //   const tempArray = []
@@ -186,8 +199,13 @@ export default function App() {
   useEffect(() => {
     // getData();
     getCard();
-    saveCardArtistArray(cardsReceived);
+    // saveCardArtistArray(cardsReceived);
   }, []);
+  
+  useEffect(() => {
+    
+    DisplayArtistArray(artistArray)
+  }, [isLoading]);
   
   return (
     <div className="App">
@@ -203,7 +221,7 @@ export default function App() {
       </div>
       
       <div className="cardDisplayBox">
-      <DisplayArtistArray/>
+      <DisplayArtistArray artistArray={artistArray}/>
       
       </div>
     </div>
