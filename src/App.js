@@ -6,59 +6,66 @@ export default function App() {
   const[ duck, setDuck ] = useState("default duck");
   const[ card, setCard ] = useState("no card chosen");
   const[ cardName, setCardName ] = useState("defaultcard");
-  // array
   // const[ cardsReceived, setCardsReceived ] = useState([]);
   const cardsReceived = []
+  const artistArray =["testitem", "seconditem", "thriditem", "fourthitem"]
+  // const artistArray =[]
   
   const [isLoading, setIsLoading] = useState(false);
   
-  const getData = async () => {
-    setIsLoading(true);
-    try {
-      const url = "https://thronesapi.com/api/v2/Characters/13";
-      // const url = "https://random-d.uk/api/random";
-      const response = await fetch(url, {
-        headers: {
-          Accept: "application/json"
-          
-        }
-      }).then(
-        async response => {
-          try {
-            const thronesCharacter = await response.json();
-            console.log(thronesCharacter)
-            console.log("received character")
-            setDuck(thronesCharacter.imageUrl)
-            // console.log(thronesCharacter.firstName)
-          } catch (e) {
-            console.log(e)
-          }
-        }
-      )
-      // setDuck(thronesJson.url);
-      // console.log(duck)
-      // console.log(response.json)
-    } catch (e) {
-      console.log(e.message);
-    }
-    // const response = await fetch(url);
-    // console.log(response);
-    // const receivedDuck = await response.json();
-    // setDuck(receivedDuck.url[0]);
-    setIsLoading(false);
+  const emptyCardsReceivedArray = () => {
+    // cardsReceived = [];
+    // empty cardsReceived array by setting length to 0
+    cardsReceived.length = 0;
   };
   
   const makeUrl = (props) => {
     const baseUrl = "https://api.magicthegathering.io/v1/cards?";
     const cardUrlName = "name=" + cardName;
-    // const cardUrlLanguage = "&language=" + cardLanguage;
+    // const cardUrlPageSize = "&pageSize=" + pageSize;
     const workingUrl = baseUrl + cardUrlName;
     return workingUrl
-  };
+  };  
+  
+  // const getCharacterData = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const url = "https://thronesapi.com/api/v2/Characters/13";
+  //     // const url = "https://random-d.uk/api/random";
+  //     const response = await fetch(url, {
+  //       headers: {
+  //         Accept: "application/json"
+          
+  //       }
+  //     }).then(
+  //       async response => {
+  //         try {
+  //           const thronesCharacter = await response.json();
+  //           console.log(thronesCharacter)
+  //           console.log("received character")
+  //           setDuck(thronesCharacter.imageUrl)
+  //           // console.log(thronesCharacter.firstName)
+  //         } catch (e) {
+  //           console.log(e)
+  //         }
+  //       }
+  //     )
+  //     // setDuck(thronesJson.url);
+  //     // console.log(duck)
+  //     // console.log(response.json)
+  //   } catch (e) {
+  //     console.log(e.message);
+  //   }
+  //   // const response = await fetch(url);
+  //   // console.log(response);
+  //   // const receivedDuck = await response.json();
+  //   // setDuck(receivedDuck.url[0]);
+  //   setIsLoading(false);
+  // };
   
   const getCard = async () => {
     setIsLoading(true);
-    // setCardsReceived([]);
+    emptyCardsReceivedArray();
     console.log("searching for "+ cardName);
     // const url = "https://api.magicthegathering.io/v1/cards?supertypes=legendary&types=creature&colors=black,white&pageSize=2";
     const url = makeUrl(cardName);
@@ -71,15 +78,10 @@ export default function App() {
         async response => {
           // console.log(response);
           const cardResponse = await response.json();
-          // for each cardItem in cardResponse.cards array
-          // for(var cardItem in cardResponse.cards) {
-          //   console.log("index: " + cardItem);
-          //   console.log(cardResponse.cards[cardItem]);
-          // }
-          
-          console.log("listing cardResponse cards as received")
-          console.log(cardResponse.cards);
-          
+          // console.log("listing cardResponse cards as received")
+          // console.log(cardResponse.cards);
+          // name of first card result
+          // console.log(cardResponse.cards[0].name);
           for(var cardItem in cardResponse.cards) {
             cardsReceived.push(cardResponse.cards[cardItem])
             // console.log("added from cardResponse:")
@@ -87,10 +89,11 @@ export default function App() {
             // console.log("added to cardsReceived: ")
             // console.log(cardsReceived[cardItem])
           }
-          
-          
-          // name of first card result
-          // console.log(cardResponse.cards[0].name);
+          console.log(cardsReceived.length)
+          // console.log(cardsReceived)
+          // displayCardsInConsole();
+          saveCardArtistArray(cardsReceived);
+          console.log("saved artists in main artist array")
         }
         
         )
@@ -100,10 +103,69 @@ export default function App() {
     setIsLoading(false);
   }
   
-  // const listCardsReceived = cardsReceived.map((card) => 
-  //   <li>{card.imageUrl}</li>  
-  // );
- 
+  const saveCardArtistArray = (cardsReceived) => {
+    artistArray.length = 0
+    for(var card in cardsReceived) {
+      if(artistArray.includes(cardsReceived[card].artist)) {
+        // duplicate artist not added
+      } else {
+        artistArray.push(cardsReceived[card].artist)
+      }
+    }
+    // console.log(artistArray)
+  }
+  
+  const displayCardsInConsole = () => {
+    for(var cardNumber in cardsReceived) {
+      console.log(cardsReceived[cardNumber].name)
+      console.log(cardsReceived[cardNumber].type)
+      console.log(cardsReceived[cardNumber].setName)
+      console.log(cardsReceived[cardNumber].rarity)
+      console.log(cardsReceived[cardNumber].imageUrl)
+    }
+  }
+  
+  // const DisplayCardsReceived = () => {
+  //   for(var cardNumber in cardsReceived) {
+  //     JSON.stringify(cardsReceived[cardNumber])
+  //     console.log(cardsReceived[cardNumber])
+  //   }
+  //   try {
+  //   return(
+  //     <ul>{
+  //       <li>{cardsReceived}</li>
+  //     }</ul>
+  //     )
+  //   } catch (e) {
+  //     console.log(e.message)
+  //     return null
+  //   }
+  // }
+  
+  const DisplayArtistArray = () => {
+    return(
+      <ul>
+        {artistArray.map((artist) => (
+        <li>{artist}</li>
+        ))}
+      </ul>
+    );
+  };
+  
+  // const DisplayArtistsArray = () => {
+  //   const tempArray = [];
+  //   for(var artist in artistArray){
+  //     tempArray.push(artistArray[artist]);
+  //   }
+  //   return(
+  //     <ul>
+  //       {tempArray.map((artist) => (
+  //       <li>{artist}</li>
+  //       ))}
+  //     </ul>
+  //   );
+  // };
+  
   // const displayCards = () => {
   //   const tempArray = []
   //   for(var card in cardsReceived){
@@ -124,6 +186,7 @@ export default function App() {
   useEffect(() => {
     // getData();
     getCard();
+    saveCardArtistArray(cardsReceived);
   }, []);
   
   return (
@@ -140,6 +203,8 @@ export default function App() {
       </div>
       
       <div className="cardDisplayBox">
+      <DisplayArtistArray/>
+      
       </div>
     </div>
   );
