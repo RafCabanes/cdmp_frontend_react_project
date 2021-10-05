@@ -12,7 +12,7 @@ export default function App() {
   const[ displayCardArtist, setDisplayCardArtist] = useState("displayCardArtist");
   const[ displayCardSetName, setDisplayCardSetName] = useState("displayCardSetName");
   const[ displayCardRarity, setDisplayCardRarity] = useState("displayCardRarity");
-  const[ displayCardImageUrl, setDisplayCardImageUrl] = useState(null);
+  const[ displayCardImageUrl, setDisplayCardImageUrl] = useState("");
   // const cardsReceived = []
   // const artistArray =["testitem", "seconditem", "thriditem", "fourthitem"]
   // const artistArray =[]
@@ -212,10 +212,13 @@ export default function App() {
   };
   
   const CardImageBox = () => {
-    if(!displayCardImageUrl) return;
+    if(displayCardImageUrl==="" || !displayCardImageUrl) return(<h3>no image available</h3>);
     return(
       <div>
-        
+        <img
+          src={displayCardImageUrl}
+          // alt="new"
+        />
       </div>
     )
   }
@@ -240,6 +243,7 @@ export default function App() {
       
       <div className="cardDisplayBox">
         <CardInfoBox />
+        <CardImageBox />
       </div>
     </div>
   );
