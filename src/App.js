@@ -7,7 +7,8 @@ export default function App() {
   const[ card, setCard ] = useState("no card chosen");
   const[ cardName, setCardName ] = useState("defaultcard");
   // array
-  const[ cardsReceived, setCardsReceived ] = useState([]);
+  // const[ cardsReceived, setCardsReceived ] = useState([]);
+  const cardsReceived = []
   
   const [isLoading, setIsLoading] = useState(false);
   
@@ -57,7 +58,7 @@ export default function App() {
   
   const getCard = async () => {
     setIsLoading(true);
-    setCardsReceived([]);
+    // setCardsReceived([]);
     console.log("searching for "+ cardName);
     // const url = "https://api.magicthegathering.io/v1/cards?supertypes=legendary&types=creature&colors=black,white&pageSize=2";
     const url = makeUrl(cardName);
@@ -70,22 +71,22 @@ export default function App() {
         async response => {
           // console.log(response);
           const cardResponse = await response.json();
-          // foreach cardItem in cardResponse.cards array
+          // for each cardItem in cardResponse.cards array
           // for(var cardItem in cardResponse.cards) {
           //   console.log("index: " + cardItem);
           //   console.log(cardResponse.cards[cardItem]);
           // }
           
+          console.log("listing cardResponse cards as received")
+          console.log(cardResponse.cards);
           
-          setCardsReceived(cardResponse.cards);
-          console.log(cardsReceived);
-          // listCards(cardsReceived);
-          
-          // for(var cardItem in cardsReceived){
-          //   console.log("index: " + cardItem);
-          //   const card = JSON.parse(cardItem);
-          //   console.log(card);
-          // }
+          for(var cardItem in cardResponse.cards) {
+            cardsReceived.push(cardResponse.cards[cardItem])
+            // console.log("added from cardResponse:")
+            // console.log(cardResponse.cards[cardItem])
+            // console.log("added to cardsReceived: ")
+            // console.log(cardsReceived[cardItem])
+          }
           
           
           // name of first card result
