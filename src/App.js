@@ -12,7 +12,7 @@ export default function App() {
   const[ displayCardArtist, setDisplayCardArtist] = useState("displayCardArtist");
   const[ displayCardSetName, setDisplayCardSetName] = useState("displayCardSetName");
   const[ displayCardRarity, setDisplayCardRarity] = useState("displayCardRarity");
-  const[ displayCardImageUrl, setDisplayCardImageUrl] = useState("displayCardImageUrl");
+  const[ displayCardImageUrl, setDisplayCardImageUrl] = useState(null);
   // const cardsReceived = []
   // const artistArray =["testitem", "seconditem", "thriditem", "fourthitem"]
   // const artistArray =[]
@@ -195,6 +195,30 @@ export default function App() {
     // // );
   // };
   
+  const CardInfoBox = () => {
+    return(
+      <div>
+        <h1> Card Info</h1>
+          {<ul>
+            <li>Card Name: {displayCardName}</li>
+            <li>Card Type: {displayCardType}</li>
+            <li>Card Artist: {displayCardArtist}</li>
+            <li>Card Set: {displayCardSetName}</li>
+            <li>Card Rarity {displayCardRarity}</li>
+          </ul>}
+      </div>
+      )
+    // return null;
+  };
+  
+  const CardImageBox = () => {
+    if(!displayCardImageUrl) return;
+    return(
+      <div>
+        
+      </div>
+    )
+  }
   
   // useEffect exactly once
   useEffect(() => {
@@ -203,7 +227,7 @@ export default function App() {
   
   return (
     <div className="App">
-      {isLoading && <h1>currently fetching response</h1>}
+      {isLoading && <h1>Fetching response</h1>}
       <div className="searchbox">
         <h1>Type card name in searchbox</h1>
         <input
@@ -215,7 +239,7 @@ export default function App() {
       </div>
       
       <div className="cardDisplayBox">
-      
+        <CardInfoBox />
       </div>
     </div>
   );
