@@ -87,7 +87,6 @@ export default function App() {
     );
   };
   
-  // useEffect to run exactly once
   useEffect(() => {
     getCard();
   }, []);
